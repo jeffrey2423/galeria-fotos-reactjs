@@ -23,10 +23,35 @@ controller.save = (req, res) => {
 				res.json(err);
 			}
 			console.log(customer);
-			res.send('funciona');
+			res.redirect('/');
 
 		});
 	});
+};
+
+controller.delete = (req, res) => {
+	const idBorrar = req.params.id;
+	//var result = confirm("Want to delete?");
+	req.getConnection((err, conn)=>{
+		//if (result) {
+			conn.query('DELETE FROM customer WHERE id = ?',[idBorrar], (err, customer) => {
+			if (err) {
+				res.json(err);
+			}
+			res.redirect('/');
+			//alert('gghghghgh')
+
+			});
+		/*}else{
+			res.redirect('/');
+		}*/
+
+		
+
+	});
+
+
+
 };
 
 
