@@ -32,6 +32,8 @@ app.use(myConnection(mysql, {
 	//insecureAuth : true
 }, 'single'));
 
+app.use(express.urlencoded({extended: false}));
+
 //routes
 app.use('/', customerRoutes);
 
