@@ -29,6 +29,32 @@ controller.save = (req, res) => {
 	});
 };
 
+controller.edit = (req, res) => {
+	const idActualizar = req.params.id;
+	req.getConnection((err, conn)=>{
+			conn.query('SELECT * FROM customer WHERE id = ?',[idActualizar], (err, customer) => {
+				res.render('customer_edit',{
+					data:customer[0]
+				});
+
+		});
+	});
+};
+
+controller.update = (req, res) => {
+	const idActualizar = req.params.id;
+	const datosActualizados = req.body;
+	req.getConnection((err, conn)=>{
+			conn.query('UPDATE customer set ? WHERE id = ?',[datosActualizados, idActualizar], (err, customer) => {
+			if (err) {
+				res.json(err);
+			}
+			res.redirect('/');
+
+			});
+	});
+};
+
 controller.delete = (req, res) => {
 	const idBorrar = req.params.id;
 	//var result = confirm("Want to delete?");
