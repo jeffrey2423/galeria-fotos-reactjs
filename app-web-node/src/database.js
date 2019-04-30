@@ -6,6 +6,20 @@ const {database} = require('./keys');
 const pool = mysql.createPool(database);
 
 pool.getConnection((err, conn) =>{
+	/*    if (err) {
+          conn.release();
+          throw err;
+        }   
+        conn.query(query,function(err,rows){
+            conn.release();
+            if(!err) {
+                callback(null, {rows: rows});
+            }           
+        });
+        conn.on('error', function(err) {      
+              throw err;
+              return;     
+        });*/
 	if (err) {
 		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
 			console.error('DATABASE CONECTION WAS CLOSED');
@@ -20,10 +34,15 @@ pool.getConnection((err, conn) =>{
 
 	if (conn) conn.release();
 		console.log('LA BASE DE DATOS SE HA CONECTADO');
-			return;
+	return;/*
+	        conn.on('error', function(err) {      
+              throw err;
+              return;     
+        });*/
 });
+
 
 //consultas
 pool.query = promisify(pool.query);
 
-module.exports == pool;
+module.exports = pool;
