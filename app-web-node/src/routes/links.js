@@ -16,9 +16,16 @@ router.post('/add', async (req, res) =>{
 	};
 	console.log(newLink);
 	await pool.query('INSERT INTO links set ?', [newLink]);
-	req.flash('success', 'Link guardado correctamente');
+	req.flash('success', {'success': 'Link guardado correctamente'});
 	res.redirect('/links');
+	//res.render('./layouts/main', { success: req.flash('success') });
+	//res.status({success: req.flash('success')}).redirect('../layouts/main.hbs');
 });
+
+//mensajes
+/*router.post('/', function(req, res){
+  res.render('/links', { success: req.flash('success') });
+});*/
 
 router.get('/', async (req, res) =>{
 	const links = await pool.query('SELECT * FROM links');

@@ -26,6 +26,10 @@ app.engine('.hbs', exphbs({
 app.set('view engine', '.hbs');
 
 //Funciones para las peticiones cliente
+app.use(morgan('dev'));
+app.use(express.urlencoded({extended: false}));
+app.use(express.json());
+
 app.use(session({
 	secret: 'sessionapp',
 	resave: false,
@@ -35,16 +39,16 @@ app.use(session({
 }));
 
 app.use(flash());
-app.use(morgan('dev'));
-app.use(express.urlencoded({extended: false}));
-app.use(express.json());
-
-
 //variables globales
 app.use((req, res, next) =>{
-	app.locals.success = req.flash('success');
+	res.locals.success = req.flash();
 	next();
 });
+
+
+
+
+
 
 //rutas
 app.use(require('./routes/'));
