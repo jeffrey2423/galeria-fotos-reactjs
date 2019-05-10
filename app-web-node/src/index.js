@@ -34,7 +34,7 @@ app.use(session({
 }));
 
 app.use(flash());
-//app.use(app.router);
+
 //Funciones para las peticiones cliente
 app.use(morgan('dev'));
 app.use(express.urlencoded({extended: false}));
@@ -43,6 +43,7 @@ app.use(express.json());
 //variables globales
 app.use((req, res, next) =>{
 	res.locals.success = req.flash('success');
+	
 	next();
 });
 
