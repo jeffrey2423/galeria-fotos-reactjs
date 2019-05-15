@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const exphbs = require('express-handlebars');
 const path = require('path');
-const flash = require('connect-flash');
+const flash = require('connect-flash-plus');
 const session = require('express-session');
 const mysqlStore = require('express-mysql-session');
 const passport = require('passport');
@@ -27,18 +27,14 @@ app.engine('.hbs', exphbs({
 }));
 app.set('view engine', '.hbs');
 
+//app.use(cookieParser('secret'));
 app.use(session({
 	secret: 'sessionapp',
 	resave: false,
 	saveUninitialized: false,
 	store: new mysqlStore(database),
-	cookie: { secure: true }
-
 }));
-//app.use(session());
-
 app.use(flash());
-
 //Funciones para las peticiones cliente
 app.use(morgan('dev'));
 app.use(express.urlencoded({extended: false}));

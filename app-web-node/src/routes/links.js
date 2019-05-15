@@ -16,7 +16,7 @@ router.post('/add', async (req, res) =>{
 	};
 	console.log(newLink);
 	await pool.query('INSERT INTO links set ?', [newLink]);
-	req.flash('success', 'Link guardado correctamente');
+	req.flash('success', 'Link guardado correctamente')
 	req.session.save(function () {
   		res.redirect('/links');
 	});

@@ -21,15 +21,15 @@ passport.use('local.signup', new localStrategy({
 	//encriptamos la contraseña
 	newUser.password = await helpers.encryptPassword(password);
 	//validamos que el usuario no sea el mismo
-	const verUser = await pool.query('SELECT count(*) FROM users Where username = ?', [username]);
-	const resultUser = mysql_fetch_row(verUser);
-	if(resultUser === 0){
+	//const verUser = await pool.query('SELECT count(*) FROM users Where username = ?', [username]);
+	//const resultUser = mysql_fetch_row(verUser);
+	//if(resultUser === 0){
 			const result = await pool.query('INSERT INTO users SET ?', [newUser]);
 			newUser.id = result.insertId;
 			return done(null, newUser);
-	}else{
-		req.flash('success', 'Link guardado correctamente');
-	}
+	//}else{
+		//req.flash('success', 'Link guardado correctamente');
+	//}
 
 }));
 
