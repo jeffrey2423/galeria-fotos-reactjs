@@ -21,12 +21,27 @@ passport.use('local.signup', new localStrategy({
 	//encriptamos la contraseña
 	newUser.password = await helpers.encryptPassword(password);
 	//validamos que el usuario no sea el mismo
-	//const verUser = await pool.query('SELECT count(*) FROM users Where username = ?', [username]);
-	//const resultUser = mysql_fetch_row(verUser);
-	//if(resultUser === 0){
+	await pool.query('SELECT * FROM users Where username = ?', [username], async (res, err, rows) =>{
+		
+		if (err)
+			return done(err);
+		if (rows.length) {
+			//req.flash('success', 'ya existe el user');
+			console.log('ya existe');
+			req.flash('success', 'error')
+			req.session.save(function () {
+		  		res.redirect('/signup');
+			});
+		}else{
 			const result = await pool.query('INSERT INTO users SET ?', [newUser]);
 			newUser.id = result.insertId;
 			return done(null, newUser);
+
+		}
+	});
+	//const resultUser = mysql_fetch_row(verUser);
+	//if(resultUser === 0){
+
 	//}else{
 		//req.flash('success', 'Link guardado correctamente');
 	//}
