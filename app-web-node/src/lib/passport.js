@@ -23,14 +23,11 @@ passport.use('local.signin', new localStrategy({
 			}
 		}else{
 			return done(null, false, req.flash('error','El usuario no existe'));
-
 		}
-
 }));
 
 
 //PASSPORT SIGNUP
-
 passport.use('local.signup', new localStrategy({
 	usernameField: 'username',
 	passwordField: 'password',
@@ -51,8 +48,9 @@ passport.use('local.signup', new localStrategy({
 	const rowsUser = await pool.query('SELECT * FROM users Where username = ?', [username]);
 		if (rowsUser.length > 0) {
 			console.log('ya existe');
-			//passport.authenticate('local.signup', req.flash('error','El usuario ya existe, intenta con otro') );
-			return done(null, false, req.flash('error','El usuario ya existe, intenta con otro'));
+			//passport.authenticate('local.signup', {failureFlash: req.flash('error','El usuario ya existe, intenta con otro')});
+			done(null, false, {failureFlash: req.flash('success','El usuario ya existe, intenta con otro')});
+			//return done(null, false, {error: 'El usuario ya existe, intenta con otro'});
 		}else{
 			const result = await pool.query('INSERT INTO users SET ?', [newUser]);
 			newUser.id = result.insertId;
