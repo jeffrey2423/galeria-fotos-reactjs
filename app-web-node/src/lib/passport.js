@@ -4,6 +4,33 @@ const localStrategy = require('passport-local').Strategy;
 const pool = require('../database');
 const helpers = require('../lib/helpers');
 
+//PASSPORT SIGNIN
+passport.use('local.signin', new localStrategy({
+	usernameField: 'username',
+	passwordField: 'password',
+	passReqToCallback: true
+
+}, async (req, username, password, done)=>{
+	
+	const rows = await pool.query('SELECT * FROM users Where username = ?', [username]);
+		if (rows.length > 0) {
+			const user = rows[0];
+			const validPassword = await helpers.matchPassword(password, user.password);
+			if(validPassword){
+				return done(null, user, req.flash('message', 'Bienvenido' + user.username));
+			}else{
+				return done(null, false, req.flash('error','Usuario o contraseña incorrectos'));
+			}
+		}else{
+			return done(null, false, req.flash('error','El usuario no existe'));
+
+		}
+
+}));
+
+
+//PASSPORT SIGNUP
+
 passport.use('local.signup', new localStrategy({
 	usernameField: 'username',
 	passwordField: 'password',
@@ -21,30 +48,19 @@ passport.use('local.signup', new localStrategy({
 	//encriptamos la contraseña
 	newUser.password = await helpers.encryptPassword(password);
 	//validamos que el usuario no sea el mismo
-	await pool.query('SELECT * FROM users Where username = ?', [username], async (res, err, rows) =>{
-		
-		if (err)
-			return done(err);
-		if (rows.length) {
-			//req.flash('success', 'ya existe el user');
+	const rowsUser = await pool.query('SELECT * FROM users Where username = ?', [username]);
+		if (rowsUser.length > 0) {
 			console.log('ya existe');
-			req.flash('success', 'error')
-			req.session.save(function () {
-		  		res.redirect('/signup');
-			});
+			//passport.authenticate('local.signup', req.flash('error','El usuario ya existe, intenta con otro') );
+			return done(null, false, req.flash('error','El usuario ya existe, intenta con otro'));
 		}else{
 			const result = await pool.query('INSERT INTO users SET ?', [newUser]);
 			newUser.id = result.insertId;
-			return done(null, newUser);
+			return done(null, newUser, req.flash('success','El usuario se ha creado con exito'));
 
 		}
-	});
-	//const resultUser = mysql_fetch_row(verUser);
-	//if(resultUser === 0){
+	
 
-	//}else{
-		//req.flash('success', 'Link guardado correctamente');
-	//}
 
 }));
 

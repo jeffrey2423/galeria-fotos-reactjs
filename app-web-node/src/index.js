@@ -6,6 +6,7 @@ const flash = require('connect-flash-plus');
 const session = require('express-session');
 const mysqlStore = require('express-mysql-session');
 const passport = require('passport');
+var cookieParser = require('cookie-parser');
 
 const {database} = require('./keys');
 
@@ -27,12 +28,12 @@ app.engine('.hbs', exphbs({
 }));
 app.set('view engine', '.hbs');
 
-//app.use(cookieParser('secret'));
+app.use(cookieParser());
 app.use(session({
 	secret: 'sessionapp',
-	resave: false,
-	saveUninitialized: false,
-	store: new mysqlStore(database),
+  	resave: false,
+  	saveUninitialized: true,
+	store: new mysqlStore(database)
 }));
 app.use(flash());
 //Funciones para las peticiones cliente
@@ -45,6 +46,8 @@ app.use(passport.session());
 //variables globales
 app.use((req, res, next) =>{
 	app.locals.success = req.flash('success');
+	app.locals.error = req.flash('error');
+	app.locals.message = req.flash('message');
 	next();
 });
 
