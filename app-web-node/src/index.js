@@ -29,11 +29,13 @@ app.engine('.hbs', exphbs({
 app.set('view engine', '.hbs');
 
 app.use(cookieParser());
+
 app.use(session({
 	secret: 'sessionapp',
   	resave: false,
   	saveUninitialized: true,
 	store: new mysqlStore(database)
+	//cookie: 
 }));
 app.use(flash());
 //Funciones para las peticiones cliente
