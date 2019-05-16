@@ -19,7 +19,7 @@ passport.use('local.signin', new localStrategy({
 			if(validPassword){
 				return done(null, user, req.flash('message', 'Bienvenido' + user.username));
 			}else{
-				return done(null, false, req.flash('error','Usuario o contraseña incorrectos'));
+				return done(null, false, req.flash('error','Contraseña incorrecta'));
 			}
 		}else{
 			return done(null, false, req.flash('error','El usuario no existe'));
@@ -49,12 +49,12 @@ passport.use('local.signup', new localStrategy({
 		if (rowsUser.length > 0) {
 			console.log('ya existe');
 			//passport.authenticate('local.signup', {failureFlash: req.flash('error','El usuario ya existe, intenta con otro')});
-			done(null, false, {failureFlash: req.flash('success','El usuario ya existe, intenta con otro')});
-			//return done(null, false, {error: 'El usuario ya existe, intenta con otro'});
+			done(null, false, {failureFlash: req.flash('error','El usuario ya existe, intenta con otro')});
+			//return done(null, false, req.flash('error','El usuario ya existe, intenta con otro'));
 		}else{
 			const result = await pool.query('INSERT INTO users SET ?', [newUser]);
 			newUser.id = result.insertId;
-			return done(null, newUser, req.flash('success','El usuario se ha creado con exito'));
+			return done(null, newUser, req.flash('successSignUp','El usuario se ha creado con exito'));
 
 		}
 	
