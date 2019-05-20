@@ -2,11 +2,10 @@ const express = require('express');
 const morgan = require('morgan');
 const exphbs = require('express-handlebars');
 const path = require('path');
-const flash = require('connect-flash-plus');
+const flash = require('connect-flash');
 const session = require('express-session');
 const mysqlStore = require('express-mysql-session');
 const passport = require('passport');
-var cookieParser = require('cookie-parser');
 
 const {database} = require('./keys');
 
@@ -27,8 +26,6 @@ app.engine('.hbs', exphbs({
 	helpers: require('./lib/handlebars')
 }));
 app.set('view engine', '.hbs');
-
-app.use(cookieParser());
 
 app.use(session({
 	secret: 'sessionapp',
