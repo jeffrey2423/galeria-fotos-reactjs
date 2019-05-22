@@ -43,7 +43,7 @@ router.get('/signin', (req, res) => {
 
 router.post('/signin', (req, res, next) => {
   passport.authenticate('local.signin', {
-    successRedirect: req.session.save(function () { res.redirect('/profile') }),
+    successRedirect: req.session.save(function () { res.redirect('/signin') }),
     failureRedirect: req.session.save(function () { res.redirect('/signin') }),
     failureFlash: true
   })(req, res, next);
