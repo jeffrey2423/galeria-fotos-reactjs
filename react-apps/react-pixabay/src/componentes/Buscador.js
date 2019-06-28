@@ -4,12 +4,17 @@ class Buscador extends Component{
 
     busquedaRef = React.createRef();
 
+    obtenerDatos = (e) =>{
+        e.preventDefault();
+        console.log(this.busquedaRef.current.value);
+    }
+
     render() {
         return(
-            <form >
+            <form onSubmit={this.obtenerDatos} >
                 <div className="row">
                     <div className="form-group col-md-8">
-                        <input  type="text" className="
+                        <input ref={this.busquedaRef} type="text" className="
                         form-control form-control-lg" placeholder="Busca tu imagen"></input>
                     </div>
                     <div className="form-group col-md-4">
